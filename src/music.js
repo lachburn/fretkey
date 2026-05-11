@@ -34,6 +34,21 @@ export const VOICINGS = {
   'B':  ['x24442','xx4674','x24222','x24442','x24442','x24432','xx4323'],
 }
 
+export const INVERSIONS = {
+  'C':  { sus2: 'x30013', sus4: 'x33011', '7': 'x32310' },
+  'C#': { sus2: 'x46644', sus4: 'x46674', '7': 'x46464' },
+  'D':  { sus2: 'xx0230', sus4: 'xx0233', '7': 'xx0212' },
+  'D#': { sus2: 'xx1341', sus4: 'x68896', '7': 'xx1323' },
+  'E':  { sus2: '024400', sus4: '022200', '7': '020100' },
+  'F':  { sus2: 'xx3013', sus4: '133311', '7': '131211' },
+  'F#': { sus2: 'xx4124', sus4: '244422', '7': '242322' },
+  'G':  { sus2: '3x0233', sus4: '3x0013', '7': '320001' },
+  'G#': { sus2: '4x1344', sus4: '4x1124', '7': '4x4544' },
+  'A':  { sus2: 'x02200', sus4: 'x02230', '7': 'x02020' },
+  'A#': { sus2: 'x13311', sus4: 'x13341', '7': 'x13131' },
+  'B':  { sus2: 'x24422', sus4: 'x24452', '7': 'x21202' },
+}
+
 export function getChords(keyNote) {
   const rootIdx = NOTES.indexOf(keyNote)
   return SCALE_INTERVALS.map((interval, degree) => {
@@ -41,6 +56,7 @@ export function getChords(keyNote) {
     const note = NOTES[noteIdx]
     return {
       degree,
+      note,
       roman: ROMAN_NUMERALS[degree],
       quality: QUALITIES[degree],
       chordName: note + (QUALITIES[degree] === 'minor' ? 'm' : QUALITIES[degree] === 'diminished' ? 'dim' : ''),

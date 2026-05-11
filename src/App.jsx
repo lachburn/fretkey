@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NOTES, NOTE_DISPLAY, getChords } from './music'
+import { NOTES, NOTE_DISPLAY, INVERSIONS, getChords } from './music'
 import FretboardDiagram from './FretboardDiagram'
 import './App.css'
 
@@ -8,28 +8,46 @@ const CAPO_OPTIONS = [
   ...Array.from({ length: 7 }, (_, i) => ({ value: i + 1, label: `Fret ${i + 1}` })),
 ]
 
+const VARIANT_OPTIONS = [
+  { key: 'normal', label: 'norm' },
+  { key: 'sus2',   label: 'sus2' },
+  { key: 'sus4',   label: 'sus4' },
+  { key: '7',      label: 'dom7' },
+]
+
 function badgeColors(roman, active) {
   if (active) {
-    if (roman === 'I' || roman === 'IV' || roman === 'V') {
+    if (roman === 'I' || roman === 'IV' || roman === 'V')
       return { color: '#93c5fd', background: 'rgba(255,255,255,0.12)' }
-    }
-    if (roman === 'ii' || roman === 'iii' || roman === 'vi') {
+    if (roman === 'ii' || roman === 'iii' || roman === 'vi')
       return { color: '#c4b5fd', background: 'rgba(255,255,255,0.12)' }
-    }
     return { color: '#fcd34d', background: 'rgba(255,255,255,0.12)' }
   }
-  if (roman === 'I' || roman === 'IV' || roman === 'V') {
+  if (roman === 'I' || roman === 'IV' || roman === 'V')
     return { color: '#1e40af', background: '#dbeafe' }
-  }
-  if (roman === 'ii' || roman === 'iii' || roman === 'vi') {
+  if (roman === 'ii' || roman === 'iii' || roman === 'vi')
     return { color: '#5b21b6', background: '#ede9fe' }
-  }
   return { color: '#92400e', background: '#fef3c7' }
 }
 
-function ChordCard({ chord, active, onTap }) {
-  const { roman, quality, chordName, voicing } = chord
+function ChordCard({ chord, active, variant, onTap, onVariantChange }) {
+  const { roman, quality, chordName, voicing, note } = chord
+  const isDim = quality === 'diminished'
   const badge = badgeColors(roman, active)
+
+  const effectiveVoicing = (!isDim && variant !== 'normal')
+    ? INVERSIONS[note][variant]
+    : voicing
+
+  const effectiveChordName = variant === 'sus2' ? note + 'sus2'
+    : variant === 'sus4' ? note + 'sus4'
+    : variant === '7'    ? note + '7'
+    : chordName
+
+  const effectiveQuality = variant === 'sus2' ? 'sus 2'
+    : variant === 'sus4' ? 'sus 4'
+    : variant === '7'    ? 'dom 7'
+    : quality
 
   return (
     <div
@@ -40,11 +58,33 @@ function ChordCard({ chord, active, onTap }) {
         <span className="chord-card__roman" style={{ color: badge.color, background: badge.background }}>
           {roman}
         </span>
-        <span className="chord-card__name">{chordName}</span>
-        <span className="chord-card__quality">{quality}</span>
+        <span className="chord-card__name">{effectiveChordName}</span>
+        <span className="chord-card__quality">{effectiveQuality}</span>
       </div>
+
+      {!isDim && (
+        <div
+          className="chord-card__variants"
+          onClick={e => e.stopPropagation()}
+        >
+          {VARIANT_OPTIONS.map(v => (
+            <button
+              key={v.key}
+              className={[
+                'variant-btn',
+                variant === v.key ? 'variant-btn--active' : '',
+                active ? 'variant-btn--on-active' : '',
+              ].filter(Boolean).join(' ')}
+              onClick={() => onVariantChange(v.key)}
+            >
+              {v.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className="chord-card__diagram">
-        <FretboardDiagram voicing={voicing} active={active} />
+        <FretboardDiagram voicing={effectiveVoicing} active={active} />
       </div>
     </div>
   )
@@ -54,23 +94,28 @@ export default function App() {
   const [keyIdx, setKeyIdx] = useState(0)
   const [capo, setCapo] = useState(0)
   const [activeCard, setActiveCard] = useState(null)
+  const [variants, setVariants] = useState(() => Array(7).fill('normal'))
 
   const shapeKeyIdx = (keyIdx - capo + 12) % 12
   const shapeKey = NOTES[shapeKeyIdx]
   const chords = getChords(shapeKey)
 
-  const handleCardTap = (i) => {
-    setActiveCard(prev => (prev === i ? null : i))
-  }
+  const handleCardTap = (i) => setActiveCard(prev => prev === i ? null : i)
 
   const handleKeyChange = (e) => {
     setKeyIdx(Number(e.target.value))
     setActiveCard(null)
+    setVariants(Array(7).fill('normal'))
   }
 
   const handleCapoChange = (e) => {
     setCapo(Number(e.target.value))
     setActiveCard(null)
+    setVariants(Array(7).fill('normal'))
+  }
+
+  const handleVariantChange = (cardIdx, variantKey) => {
+    setVariants(prev => prev.map((v, i) => i === cardIdx ? variantKey : v))
   }
 
   return (
@@ -111,7 +156,9 @@ export default function App() {
             key={i}
             chord={chord}
             active={activeCard === i}
+            variant={variants[i]}
             onTap={() => handleCardTap(i)}
+            onVariantChange={(v) => handleVariantChange(i, v)}
           />
         ))}
       </main>

@@ -115,24 +115,23 @@ body {
   padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
-  gap: 0;
 }
 
 /* Chord card */
 .chord-card {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   background: #ffffff;
   border-radius: 8px;
   border: 1px solid #dde4ef;
-  min-height: 110px;
+  min-height: 120px;
   padding: 12px 8px 12px 16px;
   margin-bottom: 8px;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
   user-select: none;
   -webkit-user-select: none;
+  gap: 8px;
 }
 
 .chord-card:last-child {
@@ -144,6 +143,7 @@ body {
   border-color: #0f2044;
 }
 
+/* Left column */
 .chord-card__left {
   display: flex;
   flex-direction: column;
@@ -180,14 +180,59 @@ body {
 .chord-card__quality {
   font-size: 12px;
   color: #8896ae;
-  font-weight: 400;
 }
 
 .chord-card--active .chord-card__quality {
   color: rgba(255, 255, 255, 0.55);
 }
 
+/* Middle: variant buttons */
+.chord-card__variants {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  flex-shrink: 0;
+  width: 94px;
+}
+
+.variant-btn {
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 0;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+  /* default: inactive, light card */
+  background: #eef1f7;
+  color: #8896ae;
+}
+
+/* active variant on a light card → navy pill */
+.variant-btn--active {
+  background: #0f2044;
+  color: #ffffff;
+}
+
+/* on a navy (active) card — inactive */
+.variant-btn--on-active {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* on a navy card — active variant → white pill */
+.variant-btn--on-active.variant-btn--active {
+  background: rgba(255, 255, 255, 0.95);
+  color: #0f2044;
+}
+
+/* Right: diagram — fixed size so it never shifts */
 .chord-card__diagram {
   flex-shrink: 0;
-  margin-left: 8px;
+  width: 140px;
+  height: 115px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
