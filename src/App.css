@@ -1,0 +1,193 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: #f0f3f8;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: #f0f3f8;
+}
+
+/* Header */
+.header {
+  background: #0f2044;
+  padding: 16px 20px 12px;
+  padding-top: calc(16px + env(safe-area-inset-top));
+}
+
+.header__title {
+  font-size: 26px;
+  font-weight: 500;
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+.header__subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 2px;
+}
+
+/* Controls */
+.controls {
+  background: #0f2044;
+  padding: 0 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.control-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.control-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  min-width: 36px;
+  padding-top: 11px;
+  flex-shrink: 0;
+}
+
+.control-select-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.control-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 15px;
+  font-family: inherit;
+  padding: 8px 36px 8px 12px;
+  width: 100%;
+  min-height: 44px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.5)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.control-select:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* Capo hint badge */
+.capo-hint {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #93c5fd;
+  background: rgba(147, 197, 253, 0.12);
+  border: 1px solid rgba(147, 197, 253, 0.2);
+  border-radius: 6px;
+  padding: 4px 10px;
+  align-self: flex-start;
+}
+
+/* Chord list */
+.chord-list {
+  flex: 1;
+  padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Chord card */
+.chord-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #dde4ef;
+  min-height: 110px;
+  padding: 12px 8px 12px 16px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.chord-card:last-child {
+  margin-bottom: 0;
+}
+
+.chord-card--active {
+  background: #0f2044;
+  border-color: #0f2044;
+}
+
+.chord-card__left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.chord-card__roman {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  border-radius: 6px;
+  padding: 2px 8px;
+  align-self: flex-start;
+  line-height: 1.4;
+}
+
+.chord-card__name {
+  font-size: 26px;
+  font-weight: 500;
+  color: #0f2044;
+  line-height: 1.1;
+  margin-top: 2px;
+}
+
+.chord-card--active .chord-card__name {
+  color: #ffffff;
+}
+
+.chord-card__quality {
+  font-size: 12px;
+  color: #8896ae;
+  font-weight: 400;
+}
+
+.chord-card--active .chord-card__quality {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.chord-card__diagram {
+  flex-shrink: 0;
+  margin-left: 8px;
+}
